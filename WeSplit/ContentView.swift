@@ -12,7 +12,8 @@ struct ContentView: View {
     @State private var checkAmount = 0.0
     @State private var numberOfPeople = 2
     @State private var tipPercantage = 20
-    let tipPercantages = [0, 5, 10, 15, 20, 25]
+    
+    let localCurrency: FloatingPointFormatStyle<Double>.Currency = .currency(code: Locale.current.currencyCode ?? "USD")
     
     var totalPerPerson: Double {
         let peopleCount = Double(numberOfPeople + 2)
@@ -25,11 +26,15 @@ struct ContentView: View {
         return amountPerPerson
     }
     
+    var grandTotal: Double {
+        checkAmount + (checkAmount / 100 * Double(tipPercantage))
+    }
+    
     var body: some View {
         NavigationView{
             Form{
                 Section{
-                    TextField("Amount", value: $checkAmount, format: .currency(code: Locale.current.currencyCode ?? "USD"))
+                    TextField("Amount", value: $checkAmount, format: localCurrency)
                         .keyboardType(.decimalPad)
                         .focused($amountIsFocused)
                     Picker("Number of People", selection: $numberOfPeople){
@@ -40,17 +45,25 @@ struct ContentView: View {
                 }
                 Section{
                     Picker("Tip Percantage", selection: $tipPercantage){
-                        ForEach(tipPercantages, id: \.self) {
+                        ForEach(0..<101) {
                             Text($0, format: .percent)
                         }
                     }
-                    .pickerStyle(.segmented)
                 } header:{
                     Text("How much tıp do you want to leave?")
                 }
                 Section{
-                    Text(totalPerPerson, format: .currency(code: Locale.current.currencyCode ?? "USD"))
-                }}
+                    Text(grandTotal, format: localCurrency)
+                } header:{
+                    Text("Total Amount Including Tip")
+                }
+                Section{
+                    Text(totalPerPerson, format: localCurrency)
+                } header:{
+                    Text("Amount per person")
+                }
+                
+            }
             .navigationTitle("WeSplit 🤑")
             .toolbar{
                 ToolbarItemGroup(placement: .keyboard){
