@@ -9,8 +9,23 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        Text("What is that?")
-            .padding()
+        NavigationView {
+            Form{
+                Section{
+                    Text("Text Number 1")
+                    Text("Text Number 2")
+                    Text("Text Number 3")
+                    Group{
+                        Text("Text Number 4")
+                    }
+                }
+                Section{
+                    Text("Here is another section")
+                }
+                .navigationTitle("SwiftUI")
+                .navigationBarTitleDisplayMode(.inline)
+            }
+        }
     }
 }
 
