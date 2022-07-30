@@ -10,6 +10,8 @@ import SwiftUI
 struct ContentView: View {
     @State private var tapCount = 0
     @State private var name = ""
+    let students = ["Harry", "Ron", "Harmonie"]
+    @State private var selectedStudent = "Harry"
     var body: some View {
         NavigationView {
             Form{
@@ -31,6 +33,13 @@ struct ContentView: View {
                 }
                 TextField("Enter Your Name", text: $name)
                 Text("Your name is \(name)")
+                Section{
+                    Picker("Select your student", selection: $selectedStudent){
+                        ForEach(students, id: \.self){
+                            Text($0)
+                        }
+                    }
+                }
             }
         }
     }
